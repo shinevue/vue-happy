@@ -35,10 +35,6 @@ npm run build
 
 [demo address](https://cangdu.org/happyfri/) (please use chrome mobile phone mode to preview)
 
-### Scan the QR code below on the mobile terminal
-
-<img src='https://github.com/bailicangdu/vue2-happyfri/blob/master/src/images/demo.png' width="200" height="200" />
-
 ## Routing configuration
 
 ```js
