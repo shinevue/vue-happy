@@ -1,165 +1,169 @@
-# 说明
+# illustrate
 
->  非常简单的一个vue2 + vuex的项目，整个流程一目了然，麻雀虽小，五脏俱全，适合作为入门练习。
+> A very simple vue2 + vuex project, the whole process is clear at a glance, although the sparrow is small, it has all the internal organs, suitable as an introductory exercise.
 
->  如果对您有帮助，您可以点右上角 "Star" 支持一下 谢谢！ ^_^
+> If it is helpful to you, you can click "Star" in the upper right corner to support it. Thank you! ^\_^
 
->  或者您可以 "follow" 一下，我会不断开源更多的有趣的项目
+> Or you can "follow", I will continue to open source more interesting projects
 
->  如有问题请直接在 Issues 中提，或者您发现问题并有非常好的解决方案，欢迎 PR 👍
+> If you have any questions, please directly mention them in Issues, or if you find a problem and have a very good solution, welcome to PR 👍
 
->  开发环境 macOS 10.12.3 Chrome 56 nodejs 6.10.0
+> Development environment macOS 10.12.3 Chrome 56 nodejs 6.10.0
 
->  这个项目主要用于 vue2 + vuex 的入门练习，另外推荐一个 vue2 比较复杂的大型项目，覆盖了vuejs大部分的知识点。目前项目已经完成。[地址在这里](https://github.com/bailicangdu/vue2-elm)
+> This project is mainly used for the introductory practice of vue2 + vuex. In addition, a large-scale project with relatively complex vue2 is recommended, covering most of the knowledge points of vuejs. The current project has been completed. [Address here](https://github.com/bailicangdu/vue2-elm)
 
+## Project running (nodejs 6.0+)
 
-## 项目运行（nodejs 6.0+）
-``` bash
-# 克隆到本地
+```bash
+# clone to local
 git clone https://github.com/bailicangdu/vue2-happyfri.git
 
-# 进入文件夹
+# enter the folder
 cd vue2-happyfri
 
-# 安装依赖
-npm install 或 yarn(推荐)
+# install dependencies
+npm install or yarn (recommended)
 
-# 开启本地服务器localhost:8088
+# Open the local server localhost:8088
 npm run dev
 
-# 发布环境
+# Release environment
 npm run build
 ```
 
+# Effect demonstration
 
+[demo address](https://cangdu.org/happyfri/) (please use chrome mobile phone mode to preview)
 
-# 效果演示
-
-[demo地址](https://cangdu.org/happyfri/)（请用chrome手机模式预览）
-
-### 移动端扫描下方二维码
+### Scan the QR code below on the mobile terminal
 
 <img src='https://github.com/bailicangdu/vue2-happyfri/blob/master/src/images/demo.png' width="200" height="200" />
 
+## Routing configuration
 
-## 路由配置
 ```js
-import App from '../App'
+import App from "../App";
 
-export default [{
-    path: '/',
+export default [
+  {
+    path: "/",
     component: App,
-    children: [{
-        path: '',
-        component: r => require.ensure([], () => r(require('../page/home')), 'home')
-    }, {
-        path: '/item',
-        component: r => require.ensure([], () => r(require('../page/item')), 'item')
-    }, {
-        path: '/score',
-        component: r => require.ensure([], () => r(require('../page/score')), 'score')
-    }]
-}]
-
+    children: [
+      {
+        path: "",
+        component: (r) =>
+          require.ensure([], () => r(require("../page/home")), "home"),
+      },
+      {
+        path: "/item",
+        component: (r) =>
+          require.ensure([], () => r(require("../page/item")), "item"),
+      },
+      {
+        path: "/score",
+        component: (r) =>
+          require.ensure([], () => r(require("../page/score")), "score"),
+      },
+    ],
+  },
+];
 ```
 
+## Configure actions
 
-
-## 配置actions
 ```js
-import ajax from '../config/ajax'
+import ajax from "../config/ajax";
 
 export default {
-	addNum({ commit, state }, id) {
-		//点击下一题，记录答案id，判断是否是最后一题，如果不是则跳转下一题
-		commit('REMBER_ANSWER', id);
-		if (state.itemNum < state.itemDetail.length) {
-			commit('ADD_ITEMNUM', 1);
-		}
-	},
-	//初始化信息
-	initializeData({ commit }) {
-		commit('INITIALIZE_DATA');
-	}
-}
-
+  addNum({ commit, state }, id) {
+    //Click on the next question, record the answer id, judge whether it is the last question, if not, skip to the next question
+    commit("REMBER_ANSWER", id);
+    if (state.itemNum < state.itemDetail.length) {
+      commit("ADD_ITEMNUM", 1);
+    }
+  },
+  //Initialization information
+  initializeData({ commit }) {
+    commit("INITIALIZE_DATA");
+  },
+};
 ```
-
 
 ## mutations
+
 ```js
-const ADD_ITEMNUM = 'ADD_ITEMNUM'
-const REMBER_ANSWER = 'REMBER_ANSWER'
-const REMBER_TIME = 'REMBER_TIME'
-const INITIALIZE_DATA = 'INITIALIZE_DATA'
+const ADD_ITEMNUM = "ADD_ITEMNUM";
+const REMBER_ANSWER = "REMBER_ANSWER";
+const REMBER_TIME = "REMBER_TIME";
+const INITIALIZE_DATA = "INITIALIZE_DATA";
 export default {
-	//点击进入下一题
-	[ADD_ITEMNUM](state, payload) {
-		state.itemNum += payload.num;
-	},
-	//记录答案
-	[REMBER_ANSWER](state, payload) {
-		state.answerid[state.itemNum] = payload.id;
-	},
-	/*
-	记录做题时间
-	 */
-	[REMBER_TIME](state) {
-		state.timer = setInterval(() => {
-			state.allTime++;
-		}, 1000)
-	},
-	/*
-	初始化信息，
-	 */
-	[INITIALIZE_DATA](state) {
-		state.itemNum = 1;
-		state.allTime = 0;
-	},
-}
+  //Click to enter the next question
+  [ADD_ITEMNUM](state, payload) {
+    state.itemNum += payload.num;
+  },
+  //Record the answer
+  [REMBER_ANSWER](state, payload) {
+    state.answerid[state.itemNum] = payload.id;
+  },
+  /*
+record time
+*/
+  [REMBER_TIME](state) {
+    state.timer = setInterval(() => {
+      state.allTime++;
+    }, 1000);
+  },
+  /*
+initialization information,
+*/
+  [INITIALIZE_DATA](state) {
+    state.itemNum = 1;
+    state.allTime = 0;
+  },
+};
 ```
 
-## 创建store
+## create store
+
 ```js
-import Vue from 'vue'
-import Vuex from 'vuex'
-import mutations from './mutations'
-import actions from './action'
+import Vue from "vue";
+import Vuex from "vuex";
+import mutations from "./mutations";
+import actions from "./action";
 
-
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const state = {
-	level: '第一周',
-	itemNum: 1,
-	allTime: 0,
-	timer: '',
-	itemDetail: [],
-	answerid: {}
-}
+  level: "First week",
+  itemNum: 1,
+  allTime: 0,
+  timer: "",
+  itemDetail: [],
+  answerid: {},
+};
 
 export default new Vuex.Store({
-	state,
-	actions,
-	mutations
-})
+  state,
+  actions,
+  mutations,
+});
 ```
 
+## Create vue instance
 
-## 创建vue实例
 ```js
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import routes from './router/router'
-import store from './store/'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import routes from "./router/router";
+import store from "./store/";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 const router = new VueRouter({
-	routes
-})
+  routes,
+});
 
 new Vue({
-	router,
-	store,
-}).$mount('#app')
+  router,
+  store,
+}).$mount("#app");
 ```
